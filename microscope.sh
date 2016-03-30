@@ -16,7 +16,7 @@ _send-picture() {
   # Creates and attempts to email an image to a provided
   # email address.
 
-  OF=microscope-image-$(date +%s).png
+  OF=$HOME/128gb/microscope-image-$(date +%s).png
   raspistill -o $OF -w 1920 -h 1080
 
   echo "sending email..."
@@ -43,6 +43,14 @@ _key-press() {
     ;;
   esac
   printf -v "${1:-_KEY}" "%s" "$_KEY"
+}
+
+_end-vid() {
+  # Kill a raspivid instance silently.
+
+  PROCS=$(ps | grep "raspivid")
+  VID_ID=$(echo $PROCS | cut -d' ' -f 1) > /dev/null
+  kill -9 $VID_ID > /dev/null
 }
 
 # The actual meat.  Collects an email address, starts up
@@ -89,13 +97,16 @@ while [ 1 = 1 ]; do
   esac
 
   if [ $key = 'p' ]; then
-    PROCS=$(ps | grep "raspivid")
-    VID_ID=$(echo $PROCS | cut -d' ' -f 1)
-
-    kill -9 $VID_ID
+    _end-vid
     _send-picture $EMAIL
 
     raspivid -t 0 -fps 25.2 &
+  fi
+
+  if [ $key = 'q' ]; then
+    _end-vid
+    echo "Done and done."
+    exit
   fi
 
 done
