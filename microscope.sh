@@ -61,7 +61,7 @@ done
 echo "Thanks, I'll send pictures to $EMAIL"
 echo "Starting camera... "
 
-raspivid -t 0 -fps 25.2 &
+# raspivid -t 0 -fps 25.2 &
 
 while [ 1 = 1 ]; do
   
