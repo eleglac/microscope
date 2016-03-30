@@ -93,7 +93,7 @@ while [ 1 = 1 ]; do
     VID_ID=$(echo $PROCS | cut -d' ' -f 1)
 
     kill -9 $VID_ID
-    #_send-picture $EMAIL
+    _send-picture $EMAIL
 
     raspivid -t 0 -fps 25.2
   fi
