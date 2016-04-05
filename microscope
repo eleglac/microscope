@@ -1,26 +1,7 @@
 #!/bin/bash
 
-# This script ties together the raspistill and raspivid utilities
-# to allow more convenient control of the RasPi camera when taking
-# multiple pictures.  No doubt this replicates features implemented
-# elsewhere, but I wanted to finally write a shell script.
-# 
-# The script will prompt for an email address for any pictures taken
-# in a session. mpack is used to send the email with the picture as
-# an attachment, and so must be configured (/etc/ssmtp/ssmtp.conf).
-# The email address is not currently checked in any way, beyond
-# seeing if a string was entered, so make sure you don't mess it up.
-#
-# Current implemented behavior:
-#
-#   press 'p' to take a picture.
-#   press 'q' to quit.
-#
-# Credit to Franklin52 on the unix.com forums for the keypress polling
-# code.  The remainder of the script was written by Alex J. Ponting.
-
 _send-picture() {
-  # Creates and attempts to email an image to a provided
+  # Creates and image and attempts to email it to a previously-provided
   # email address.
   
   OF=$2/microscope-image-$(date +%s).png
@@ -28,7 +9,7 @@ _send-picture() {
 
   echo "sending email..."
   mpack -s "Microscope Picture" $OF $1
-  echo "finished send attempt!"
+  echo "finished send attempt, did it work?"
 }
 
 _key-press() {
@@ -53,7 +34,7 @@ _key-press() {
 }
 
 _end-vid() {
-  # Kill a raspivid instance silently.
+  # Kill a raspivid instance silently, if one is running.
   
   VID_PROC=$(ps | grep "raspivid" &)
   VID_ID=${VID_PROC:1:4}
