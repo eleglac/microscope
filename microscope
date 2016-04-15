@@ -38,7 +38,8 @@ _end-vid() {
   
   VID_PROC=$(ps | grep "raspivid" &)
   VID_ID=${VID_PROC:1:4}
-  kill -9 $VID_ID 2> /dev/null
+  kill -9 $VID_ID
+  wait $VID_ID 2> /dev/null
 }
 
 # The actual meat.  Collects an email address, starts up
