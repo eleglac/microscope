@@ -16,11 +16,13 @@ _send-vid() {
   # Creates a 10 second video clip and attempts to email it to a
   # previously-provided email address (a la send-picture)
 
-  OF=$2/microscope-video-$(date +%s).avi
-  raspivid -o $OF -w 1280 -h 720 -t 10000
+  OF=$2/microscope-video-$(date +%s)
+  raspivid -o $OF.h264 -w 1280 -h 720 -t 10000
+  MP4Box -add $OF.h264 $OF.mp4 2> /dev/null
+  rm $OF.h264
 
   echo "attempting to send video email..."
-  mpack -s "Microscope Video" $OF $1
+  mpack -s "Microscope Video" $OF.mp4 $1
   echo "finished send attempt, did it work?"
 } 
 
@@ -50,7 +52,7 @@ _end-vid() {
   
   VID_PROC=$(ps | grep "raspivid" &)
   VID_ID=${VID_PROC:1:4}
-  kill -9 $VID_ID
+  kill -SIGTERM $VID_ID
   wait $VID_ID 2> /dev/null
 }
 
