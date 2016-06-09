@@ -10,10 +10,15 @@ an attachment, and so must be configured (/etc/ssmtp/ssmtp.conf).
 The email address is not currently checked in any way, beyond
 seeing if a string was entered, so make sure you don't mess it up.
 
+The video capture function requires the use of MP4Box.
+:sudo apt-get install gpac
+
+
 ##Features/Functions
 
 While the script is running:
  - press 'p' to take a picture.
+ - press 'v' to take a 10 second 720p MP4 clip.
  - press 'q' to quit.
 
 ##Credits
