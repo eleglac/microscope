@@ -7,10 +7,22 @@ _send-picture() {
   OF=$2/microscope-image-$(date +%s).png
   raspistill -o $OF -w 1920 -h 1080
 
-  echo "sending email..."
+  echo "attempting to send picture email..."
   mpack -s "Microscope Picture" $OF $1
   echo "finished send attempt, did it work?"
 }
+
+_send-vid() {
+  # Creates a 10 second video clip and attempts to email it to a
+  # previously-provided email address (a la send-picture)
+
+  OF=$2/microscope-video-$(date +%s).avi
+  raspivid -o $OF -w 1280 -h 720 -t 10000
+
+  echo "attempting to send video email..."
+  mpack -s "Microscope Video" $OF $1
+  echo "finished send attempt, did it work?"
+} 
 
 _key-press() {
   # Detects a key press, and returns the pressed key.
@@ -80,4 +92,10 @@ while [ 1 = 1 ]; do
     exit
   fi
 
+  if [ $key = 'v' ]; then
+    _end-vid
+    _send-vid $EMAIL $ODIR
+
+    raspivid -t 0 & 
+  fi
 done
