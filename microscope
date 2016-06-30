@@ -48,12 +48,9 @@ _key-press() {
 }
 
 _end-vid() {
-  # Kill a raspivid instance silently, if one is running.
+  # Kill a raspivid instance, if one is running.
   
-  VID_PROC=$(ps | grep "raspivid" &)
-  VID_ID=${VID_PROC:1:4}
-  kill -SIGTERM $VID_ID
-  wait $VID_ID 2> /dev/null
+  pkill raspivid
 }
 
 # The actual meat.  Collects an email address, starts up
